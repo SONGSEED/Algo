@@ -3,9 +3,9 @@
 #include <cmath>
 using namespace std;
 
-vector <int> result;
-vector <int> A;
-vector <bool> visited;
+vector <int> result; //입력받은 순열로 만든 결과값 
+vector <int> A;//입력받은 배열값 
+vector <bool> visited;//방문했는지 판단 
 
 int N, Max = 0, sum;
 
@@ -15,8 +15,8 @@ void DFS(int cnt)
 	{
 		sum  = 0;
 		for (int i = 0; i < result.size() - 1; i++)
-		{
-			sum += abs(result[i] - result[i + 1]);
+		{ 
+			sum += abs(result[i] - result[i + 1]); //절대값 만큼 저장 
 		}
 		if ( Max < sum)
 			Max = sum;
