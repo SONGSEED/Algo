@@ -5,84 +5,72 @@ using namespace std;
 
 int arr[21][21] = {0,};
 int N = 0;
-vector <int> team; //팀 조합 계산할 벡터 
-vector <bool> visited; // 중복 계산 판단할 벡터 
+vector <bool> visited(21); // 중복 계산 판단할 벡터 
 int Min = 21470000;
-
+vector <int> start, link; //팀 조합 계산할 벡터 
 
 void calculate_min(void)
 {
-	int start_team = 0, link_team = 0;
-
-	for (int i = 0; i < N/2 - 1; i++)
+	int start_score = 0, link_score = 0;
+	
+	for(int i = 0; i < N; ++i)
 	{
-		for (int j = i; j < N/2 - 1; j++)
-		{
-			start_team = (arr[team[j]][team[j+1]] + arr[team[j+1]][team[j]]);
-		//	printf("%d %d\n", team[j], team[j+1]);		
-		}
-	}
-	for (int i = N/2; i < N - 1; i++)
-	{
-		for (int j = i; j < N - 1; j++)
-		{
-			link_team = (arr[team[j]][team[j+1]] + arr[team[j+1]][team[j]]);
-		//	printf("%d %d\n", team[j], team[j+1]);
-		}
+		if (visited[i] == true)
+			start.push_back(i);
+		else
+			link.push_back(i);
 	}
 	
-	if (Min > abs(start_team - link_team))
-		Min = abs(start_team - link_team);
-		
-	return;	
+	for (int i = 0; i < (N/2); ++i)
+	{
+		for (int j = 0; j < (N/2); ++j)
+		{//start, link팀 능력치의 합  
+			start_score += arr[start[i]][start[j]];
+			link_score += arr[link[i]][link[j]];
+		}
+	}
+	 //최소값 구하기  
+	
+	start.clear();
+	link.clear();
+
+	Min = min(Min,abs(start_score - link_score));
+	return ;
 }
 
 
-
-
-void DFS(int cnt)
+void DFS(int idx, int cnt)
 {
-	if (cnt == N)
+	// 팀 2개로 나누기  
+	if (cnt == (N / 2))
 	{
-	/*	for (int i = 0; i < N; i++)
-		{
-			printf("%d ", team[i]);
-		}
-		printf("\n");
-	*/
 		calculate_min();
-	//	vector <int>::iterator iter;
 		return;
 	}
 	
-	for (int i = 0; i < N; i++)
+	for (int i = idx; i < N; i++)
 	{
 		if (visited[i] == false)
 		{
 			visited[i] = true;
-			team.push_back(i + 1);
-			DFS(cnt + 1);
-			team.pop_back();
+			DFS(i + 1, cnt + 1); // i + 1; 
 			visited[i] = false;
 		}
 	}
-	
-	
+		
 }
 
 int main(void)
 {
 	scanf("%d", &N);
-	for (int i = 1; i <= N; i++)
+	for (int i = 0; i < N; i++)
 	{
-		for(int j = 1; j <= N; j++)
+		for(int j = 0; j < N; j++)
 		{
 			scanf("%d", &arr[i][j]);
 		}
-		visited.push_back(false);
 	}
-	printf("\n");
-	DFS(0);
+	DFS(0, 0);
 	printf("%d\n", Min);
 	
 	return 0;
