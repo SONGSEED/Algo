@@ -18,7 +18,7 @@ void solved()
 		}
 	}
 	
-	if ( dp[k] == INT_MAX)
+	if ( dp[k] == 100001)
 		printf("-1\n");
 	else
 		printf("%d\n", dp[k]);
@@ -31,7 +31,7 @@ int main(void)
 	{
 		scanf("%d",&coin[i]);	
 	}
-	fill(dp, dp+100001, INT_MAX);
+	fill(dp, dp+100001, 100001);
 	solved();
     
 	return 0;
